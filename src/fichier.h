@@ -13,6 +13,14 @@
 FILE* ouvreFichier(char* nom);
 
 /**
+* @brief sauvegarde les jet de des
+*
+* @param f
+* @param des
+*/
+void sauvegarder(FILE* f, int des[2]);
+
+/**
  * @brief simule la partie sauvegarder dans le fichier
  * 
  * @param f 
