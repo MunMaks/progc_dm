@@ -26,6 +26,7 @@ void initTab(char* plateau, int* position, int* attente, int nbJoueur){
         
         case 94:
             plateau[i] = 'X';
+            break;
         
         default:
             plateau[i] = ' ';
