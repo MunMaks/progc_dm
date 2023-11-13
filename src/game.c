@@ -107,6 +107,7 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
             des[0] = 0;
             des[1] = 0;
             avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, 0);
+            break;
         
         case 'P':
             attente[joueurCourant] = -1;
@@ -129,6 +130,7 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
             des[0] = 0;
             des[1] = 0;
             avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, 0);
+            break;
         
         case 'X':
             newPos = 0;
@@ -136,6 +138,7 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
             des[0] = 0;
             des[1] = 0;
             avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, 0);
+            break;
         
         default:
             break;
