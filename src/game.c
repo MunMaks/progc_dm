@@ -51,8 +51,7 @@ void initTab(char* plateau, int* position, int* attente, int nbJoueur){
 }
 
 int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant, int nbJoueur, int des[2], int premierTour){
-    int somme = 0;
-    int newPos = 0;
+    int somme = 0, newPos = 0;
 
     if(premierTour){
         if((des[1] == 3 && des[2] == 6) || (des[1] == 6 && des[2] == 3))
