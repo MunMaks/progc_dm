@@ -2,7 +2,6 @@
 #define __OPTION__
 
 #include "algo.h"
-#define TAILLE_LETTRE 500
 
 typedef struct{
     int nbJoueur;

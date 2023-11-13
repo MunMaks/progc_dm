@@ -3,6 +3,17 @@
 
 
 /**
+ * @brief initialise les differrent plateau necessaire au bon fonctionnement du jeux
+ * 
+ * @param plateau 
+ * @param position 
+ * @param attente 
+ * @param nbJoueur
+ */
+void initTab(char* plateau, int* position, int* attente, int nbJoueur);
+
+
+/**
  * @brief effectue le tour de jeu d’un joueur,
  * elle renvoie le num´ero du joueur s’il gagne la partie et -1 si la partie n’est pas finie
  * 
@@ -19,7 +30,7 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
 
 
 /**
- * @brief gere le cas de collision entre 2 joueur
+ * @brief gere le cas de collision entre 2 joueur et met a jour quoi qu'il arrive la position du joueur
  * 
  * @param plateau 
  * @param position 
@@ -48,6 +59,5 @@ void conversion(int pos, int* x, int* y);
  * @param nbJoueur 
  */
 void afficherTableau(int* plateau, int* position, int nbJoueur);
-
 
 #endif

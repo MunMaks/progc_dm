@@ -13,18 +13,17 @@
 FILE* ouvreFichier(char* nom);
 
 /**
-* @brief sauvegarde les jet de des
-*
-* @param f
-* @param des
-*/
-void sauvegarder(FILE* f, int des[2]);
-
-/**
  * @brief simule la partie sauvegarder dans le fichier
  * 
  * @param f 
  */
 void charger(FILE* f);
+
+/**
+ * @brief sauvegarde a chaque tour le lancer de de afin de pouvoir  simuler la parite quand on charge
+ * 
+ * @param f 
+ */
+void sauvegarder(FILE* f);
 
 #endif
