@@ -5,6 +5,31 @@ void initTab(char* plateau, int* position, int* attente, int nbJoueur){
     for(int i = 0; i < 100; i++){
         switch (i)
         {
+
+        case 10:
+            plateau[i] = 'O';
+            break;
+        
+        case 19:
+            plateau[i] = 'O';
+            break;
+        
+        case 30:
+            plateau[i] = 'O';
+            break;
+        
+        case 70:
+            plateau[i] = 'O';
+            break;
+        
+        case 79:
+            plateau[i] = 'O';
+            break;
+        
+        case 80:
+            plateau[i] = 'O';
+            break;
+        
         case 53:
             plateau[i] = 'T';
             break;
