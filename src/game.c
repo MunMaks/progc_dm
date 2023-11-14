@@ -51,7 +51,8 @@ void initTab(char* plateau, int* position, int* attente, int nbJoueur){
 }
 
 int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant, int nbJoueur, int des[2], int premierTour){
-    int somme = 0, newPos = 0;
+    int somme = 0;
+    int newPos = 0;
 
     if(premierTour){
         if((des[1] == 3 && des[2] == 6) || (des[1] == 6 && des[2] == 3))
@@ -81,36 +82,31 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
         else
             newPos = position[joueurCourant] + somme;
     }
-        
-        collision(plateau, position, attente, nbJoueur, joueurCourant, newPos); //encore non coder donc argument peut encore changer
 
-        switch (plateau[position[joueurCourant]])
-        {
+    switch (plateau[newPos]){
+    
         case 'O':
-            avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, 0);
-            break;
-        
+            //je ne met pas de break pour pouvoir tester sur quel j'arrive apres la case oie et je ne teste pas de collision car se sera fait dans les autre case
+            do{
+                newPos += somme;
+            }while(plateau[newPos] != 'O');
+    
         case 'T':
             for(int i = 0; i < nbJoueur; i++){
                 if(i != joueurCourant && plateau[position[i]] == 'T' && attente[i] == -1){
                     attente[i] = 0;
                 }
             }
-
             attente[joueurCourant] = -1;
             break;
-        
+    
         case 'R':
             newPos = 16;
-            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos); //encore non coder donc argument peut encore changer
-            des[0] = 0;
-            des[1] = 0;
-            avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, 0);
+            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos); 
             break;
-        
+    
         case 'P':
             attente[joueurCourant] = -1;
-
             for(int i = 0; i < nbJoueur; i++){
                 if(i != joueurCourant && plateau[position[i]] == 'P' && attente[i] == -1){
                     attente[i] = 0;
@@ -118,30 +114,70 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
                 }
             }
             break;
-        
+    
         case 'H':
             attente[joueurCourant] = 2;
+            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
             break;
-        
+    
         case 'L':
             newPos = 52;
-            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos); //encore non coder donc argument peut encore changer
-            des[0] = 0;
-            des[1] = 0;
-            avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, 0);
-            break;
+            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
         
-        case 'X':
-            newPos = 0;
-            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos); //encore non coder donc argument peut encore changer
-            des[0] = 0;
-            des[1] = 0;
-            avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, 0);
             break;
-        
+    
+            case 'X':
+                newPos = 0;
+                collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
+                break;
+    
         default:
+            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
             break;
         }
-
+    
     return -1;
+}
+
+void collision(char* plateau, int* position, int* attente, int nbJoueur, int joueurCourant, int nouvellePosition){
+
+    for(int i = 0; i < nbJoueur; i++){
+        if(i != joueurCourant && position[i] == position[joueurCourant] && plateau[position[i]] != 'P' && plateau[position[i]] != 'T'){
+            if(plateau[position[i]] == 'H')
+                attente[i] = 0;
+            
+            position[i] == position[joueurCourant];
+            position[joueurCourant] = nouvellePosition;
+
+            switch (plateau[position[i]]){
+    
+            case 'T':
+                for(int i = 0; i < nbJoueur; i++){
+                    if(i != joueurCourant && plateau[position[i]] == 'T' && attente[i] == -1){
+                        attente[i] = 0;
+                    }
+                }
+                attente[joueurCourant] = -1;
+                break;
+    
+            case 'P':
+                attente[joueurCourant] = -1;
+                for(int i = 0; i < nbJoueur; i++){
+                    if(i != joueurCourant && plateau[position[i]] == 'P' && attente[i] == -1){
+                        attente[i] = 0;
+                        attente[joueurCourant] = 0;
+                    }
+                }
+                break;
+    
+            case 'H':
+                attente[joueurCourant] = 2;
+                break;
+    
+            default:
+                break;
+            }
+        }
+    }
+
 }

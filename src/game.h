@@ -12,7 +12,6 @@
  */
 void initTab(char* plateau, int* position, int* attente, int nbJoueur);
 
-
 /**
  * @brief effectue le tour de jeu d’un joueur,
  * elle renvoie le num´ero du joueur s’il gagne la partie et -1 si la partie n’est pas finie
