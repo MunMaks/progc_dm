@@ -146,7 +146,7 @@ void collision(char* plateau, int* position, int* attente, int nbJoueur, int jou
             if(plateau[position[i]] == 'H')
                 attente[i] = 0;
             
-            position[i] == position[joueurCourant];
+            position[i] = position[joueurCourant];
             position[joueurCourant] = nouvellePosition;
 
             switch (plateau[position[i]]){
