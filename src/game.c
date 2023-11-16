@@ -6,27 +6,7 @@ void initTab(char* plateau, int* position, int* attente, int nbJoueur){
         switch (i)
         {
 
-        case 10:
-            plateau[i] = 'O';
-            break;
-        
-        case 19:
-            plateau[i] = 'O';
-            break;
-        
-        case 30:
-            plateau[i] = 'O';
-            break;
-        
-        case 70:
-            plateau[i] = 'O';
-            break;
-        
-        case 79:
-            plateau[i] = 'O';
-            break;
-        
-        case 80:
+        case 10 || 19 || 30 || 70 || 79 || 80:
             plateau[i] = 'O';
             break;
         

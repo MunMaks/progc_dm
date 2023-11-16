@@ -47,7 +47,7 @@ void collision(char* plateau, int* position, int* attente, int nbJoueur, int jou
  * @param x 
  * @param y 
  */
-void conversion(int pos, int* x, int* y);
+void conversion(int pos, int* x, int* y); // to do
 
 
 /**
@@ -57,6 +57,6 @@ void conversion(int pos, int* x, int* y);
  * @param position 
  * @param nbJoueur 
  */
-void afficherTableau(int* plateau, int* position, int nbJoueur);
+void afficherTableau(int* plateau, int* position, int nbJoueur); // to do
 
 #endif
