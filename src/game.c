@@ -91,9 +91,7 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
         case 'T':
             for(int i = 0; i < nbJoueur; i++){
                 // si joueur_i qui est dans la case "T", lui, il peut jouer pourtant joueur courant ne peut plus jouer
-                if(i != joueurCourant && plateau[position[i]] == 'T' && attente[i] == -1){  
-                    attente[i] = 0;
-                }
+                if(i != joueurCourant && plateau[position[i]] == 'T' && attente[i] == -1) { attente[i] = 0; }
             }
             attente[joueurCourant] = -1;
             break;
@@ -141,7 +139,6 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
 
 
 void collision(char* plateau, int* position, int* attente, int nbJoueur, int joueurCourant, int nouvellePosition){
-
     for(int i = 0; i < nbJoueur; ++i){
         if(i != joueurCourant && position[i] == position[joueurCourant] &&
             plateau[position[i]] != 'P' && plateau[position[i]] != 'T'){
@@ -184,65 +181,70 @@ void collision(char* plateau, int* position, int* attente, int nbJoueur, int jou
 
 }
 
-
+/* Dans cette fonction on modifie x et y du tableau avec coordonnées en spirale */
 void conversion(int pos, int* x, int* y){
-    // int tab[10][10] = {0};
-    if (pos <= 50){
+
+    if (pos <= 50){  // La moitié pour ne pas chercher longtemps
         if (pos < 28){
             if (0 <= pos && pos <= 9) { *x = 0; *y = pos; }
             else if (10 <= pos && pos <= 18) { *x = pos - 9;  *y = 9;}
-            else if (19 <= pos && pos <= 27) { *x = 9;        *y = 27 - pos;}
-        }
-        else{
-            else if (28 <= pos && pos <= 35) { *x = 36 - pos; *y = 0; } // 36 car on a passé 0
-            else if (36 <= pos && pos <= 43) { *x = 1;        *y = pos - 35; }
-            else if (44 <= pos && pos <= 50) { *x = pos - 42; *y = 8; }
-        }
-    }
-    else { // à modifier
-        if (pos <= 69){
-            if (51 <= pos && pos <= 57) { *x = 8; *y = 58 - pos; }
-            else if (58 <= pos && pos <= 63) { *x = 8; *y = 58 - pos; }
-            else if (64 <= pos && pos <= 69) { *x = 8; *y = 58 - pos; }
-        }
-        else if (pos <= 83){
-            if (70 <= pos && pos <= 74) { *x = 8; *y = 58 - pos; }
-            else if (75 <= pos && pos <= 79) { *x = 8; *y = 58 - pos; }
-            else if (80 <= pos && pos <= 83) { *x = 8; *y = 58 - pos; }
-        }
-        else if (pos <= 97){
-            if (pos <= 90)
-                if (84 <= pos && pos <= 87) { *x = 8; *y = 58 - pos; }
-                else if (88 <= pos && pos <= 90) { *x = 8; *y = 58 - pos; }
-            else {
-                if (91 <= pos && pos <= 93) { *x = 8; *y = 58 - pos; }
-                else if (94 <= pos && pos <= 95) { *x = 8; *y = 58 - pos; }
-                else if (96 <= pos && pos <= 97) { *x = 8; *y = 58 - pos; }
-            }
+            else { *x = 9; *y = 27 - pos; }  // (19 <= pos && pos <= 27)
         }
         else {
-            if (98 == pos) { *x = 5; *y = 5; }
-            else if (99 == pos) { *x = 4; *y = 5; }
+            if (28 <= pos && pos <= 35) { *x = 36 - pos; *y = 0; }
+            else if (36 <= pos && pos <= 43) { *x = 1;        *y = pos - 35; }
+            else { *x = pos - 42; *y = 8; }  // (44 <= pos && pos <= 50)
         }
     }
-    
-    /*else if (36 <= pos && pos <= 43){ 
-        *x = 1;
-        *y = pos - 35;
+    else {
+        if (pos <= 83){
+            if (pos <= 63){
+                if (51 <= pos && pos <= 57) { *x = 8; *y = 58 - pos; }
+                else { *x = 65 - pos; *y = 1; }  // (58 <= pos && pos <= 63)
+            }
+            
+            else if (pos <= 74){
+                if (64 <= pos && pos <= 69) { *x = 2; *y = pos - 62; }
+                else { *x = pos - 67; *y = 7; }  // (70 <= pos && pos <= 74)
+            }
+            
+            else {
+                if (75 <= pos && pos <= 79) { *x = 7; *y = 81 - pos; }
+                else { *x = 86 - pos; *y = 2; }  // (80 <= pos && pos <= 83)
+            }
+        }
+
+        else if (pos <= 98){
+            if (pos <= 90)
+                if (84 <= pos && pos <= 87) { *x = 3; *y = pos - 81; }
+                else { *x = pos - 84; *y = 6; }  // (88 <= pos && pos <= 90)
+            
+            else if (pos <= 95) {
+                if (91 <= pos && pos <= 93) { *x = 6; *y = 96 - pos; }
+                else { *x = 99 - pos; *y = 3; }  // (94 <= pos && pos <= 95)
+            }
+            
+            else {
+                if (96 <= pos && pos <= 97) { *x = 4; *y = pos - 92; }
+                else { *x = 5; *y = 5; }
+            }
+        }
+        else { *x = 4; *y = 5; }  // si pos == 99 je sais pas si on en a besoin
     }
-    else if (63 <= pos && pos <= 69){
-        *x = 2;
-        *y = pos + 1 - 63;  // on a passe la case 34
-        if (pos == 44) *y = 8;
-    }   
-    else if (83 <= pos && pos <= 87){
-        *x = 3;
-        if (pos == 33) {} 
-    }*/
 
-    if (0 <= pos && pos < 10) { *x = 0; *y = pos; }
-    if (0 <= pos && pos < 10) { *x = 0; *y = pos; }
+}
 
+// plateau[100] = {0, ... ,99}, positions[n] = {pos_joueur1, ... , pos_joueur_n}
+// où n = nb_joueurs
+void afficherPlateau(int plateau[], int positions[], int nb joueurs){
+    /* PAS ENCORE FINI */
+    
+    int pos = 0;
+    for (int i = 0; i < 10; ++i){
+        for (int j = 0; j < 10; ++j){
+            pos = (10 * i) + j;
+        }
+    }
 
 
     /*int ** tab = (int **) malloc(10 * sizeof(int *));
@@ -252,4 +254,5 @@ void conversion(int pos, int* x, int* y){
     // libérer la mémoire
     for (int i = 0; i < 10; ++i){ free(tab + i); }
     free(tab);*/
+
 }
