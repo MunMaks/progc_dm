@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
     if (nb_joueurs <= 1 || nb_joueurs > 4) { perror("Nb jouers impossible\n"); return 1; }
 
     while (1) {
-        MLV_Keyboard_button touche;
+        // MLV_Keyboard_button touche;
         // ajouter des dés alétoires à l'avenir
 
         printf("Deux valeurs de deux dés: ");
@@ -23,6 +23,7 @@ int main(int argc, char* argv[]){
         /*
         MLV_wait_keyboard( &touche, NULL, NULL );
         if (touche == MLV_KEYBOARD_q){  // q - quit, sortir
+            printf("Arrêt\n");
             MLV_free_window(); // la férmeture
         }
 
