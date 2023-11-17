@@ -1,10 +1,10 @@
 #include "game.h"
-
+#include <stdio.h>  // pour les tests
 void initTab(char* plateau, int* position, int* attente, int nbJoueur){
     for(int i = 0; i < 100; i++){
-        switch (i){  // Pas alétoirement (discord)
-
-            case 10 || 19 || 30 || 70 || 79 || 80:
+        switch (i){  
+            // pour la lisibilité
+            case (10) | (19) | (30) | (70) | (79) | (80):
                 plateau[i] = 'O';
                 break;
             
@@ -196,63 +196,75 @@ void conversion(int pos, int* x, int* y){
             else { *x = pos - 42; *y = 8; }  // (44 <= pos && pos <= 50)
         }
     }
-    else {
-        if (pos <= 83){
-            if (pos <= 63){
-                if (51 <= pos && pos <= 57) { *x = 8; *y = 58 - pos; }
-                else { *x = 65 - pos; *y = 1; }  // (58 <= pos && pos <= 63)
-            }
-            
-            else if (pos <= 74){
-                if (64 <= pos && pos <= 69) { *x = 2; *y = pos - 62; }
-                else { *x = pos - 67; *y = 7; }  // (70 <= pos && pos <= 74)
-            }
-            
-            else {
-                if (75 <= pos && pos <= 79) { *x = 7; *y = 81 - pos; }
-                else { *x = 86 - pos; *y = 2; }  // (80 <= pos && pos <= 83)
-            }
+    else if (pos <= 83){
+        if (pos <= 63){
+            if (51 <= pos && pos <= 57) { *x = 8; *y = 58 - pos; }
+            else { *x = 65 - pos; *y = 1; }  // (58 <= pos && pos <= 63)
         }
-
-        else if (pos <= 98){
-            if (pos <= 90)
-                if (84 <= pos && pos <= 87) { *x = 3; *y = pos - 81; }
-                else { *x = pos - 84; *y = 6; }  // (88 <= pos && pos <= 90)
-            
-            else if (pos <= 95) {
-                if (91 <= pos && pos <= 93) { *x = 6; *y = 96 - pos; }
-                else { *x = 99 - pos; *y = 3; }  // (94 <= pos && pos <= 95)
-            }
-            
-            else {
-                if (96 <= pos && pos <= 97) { *x = 4; *y = pos - 92; }
-                else { *x = 5; *y = 5; }
-            }
+        
+        else if (pos <= 74){
+            if (64 <= pos && pos <= 69) { *x = 2; *y = pos - 62; }
+            else { *x = pos - 67; *y = 7; }  // (70 <= pos && pos <= 74)
         }
-        else { *x = 4; *y = 5; }  // si pos == 99 je sais pas si on en a besoin
+        
+        else {
+            if (75 <= pos && pos <= 79) { *x = 7; *y = 81 - pos; }
+            else { *x = 86 - pos; *y = 2; }  // (80 <= pos && pos <= 83)
+        }
     }
 
+    else if (pos <= 98){
+        if (pos <= 90)
+            if (84 <= pos && pos <= 87) { *x = 3; *y = pos - 81; }
+            else { *x = pos - 84; *y = 6; }  // (88 <= pos && pos <= 90)
+        
+        else if (pos <= 95) {
+            if (91 <= pos && pos <= 93) { *x = 6; *y = 96 - pos; }
+            else { *x = 99 - pos; *y = 3; }  // (94 <= pos && pos <= 95)
+        }
+        
+        else {
+            if (96 <= pos && pos <= 97) { *x = 4; *y = pos - 92; }
+            else {*x = 5; *y = 5; }
+        }
+    }
+    else { *x = 5; *y = 4; }
 }
 
 // plateau[100] = {0, ... ,99}, positions[n] = {pos_joueur1, ... , pos_joueur_n}
 // où n = nb_joueurs
-void afficherPlateau(int plateau[], int positions[], int nb joueurs){
-    /* PAS ENCORE FINI */
+void affiche(int taille, int tab[][taille]){  // On suppose que taille = 10 par défault
+    for (int i = 0; i < taille; ++i){
+        for (int j = 0; j < taille; ++j){ printf("%d ", tab[i][j]); }
+        printf("\n");
+    }
+}
     
-    int pos = 0;
-    for (int i = 0; i < 10; ++i){
-        for (int j = 0; j < 10; ++j){
-            pos = (10 * i) + j;
-        }
+
+void afficherPlateau(int plateau[], int positions[], int nb_joueurs){
+    int tab[10][10] = {0};
+    int x = 0, y = 0;
+
+    for (int i = 0; i < 100; ++i){
+        conversion(i, &x,  &y);
+        tab[x][y] = i;
     }
-
-
-    /*int ** tab = (int **) malloc(10 * sizeof(int *));
-    for (int i = 0; i < 10; ++i){
-        *(tab + i) = (int *) malloc(10 * sizeof(int));
+    affiche(10, tab);
+    // Important faire:
+    // le joueur courant est affiché en priorité.
+    // c’est le joueur qui minimise (joueur − joueur_courant) % nb joueurs
+    // qui est est affiché sur le plateau.
+    for (int i = 0; i < nb_joueurs; ++i){ // de 2 à 4 joueurs
+        printf("Joueur %d : case %d \n", i, positions[i]);
     }
-    // libérer la mémoire
-    for (int i = 0; i < 10; ++i){ free(tab + i); }
-    free(tab);*/
+}
+    
 
+// pour vérifier, après in peut supprimer
+int main() {
+    int lst[100];
+    for (int i = 0; i < 100; ++i){ lst[i] = i; }
+    int position[4] = {0, 15, 17, 80};  // 4 parce que 4 joueurs, exemple
+    afficherPlateau(lst, position, 4);
+    return 0;
 }
