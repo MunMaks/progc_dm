@@ -10,20 +10,20 @@
  * @param nom 
  * @return FILE* 
  */
-FILE* ouvreFichier(char* nom);
+FILE* ouvreFichier(const char* nomFichier, int nbJoeur);
 
 /**
- * @brief simule la partie sauvegarder dans le fichier
+ * @brief simule la partie sauvegardée dans le fichier
  * 
- * @param f 
+ * @param fptr
  */
-void charger(FILE* f);
+void charger(FILE* fptr);
 
 /**
- * @brief sauvegarde a chaque tour le lancer de de afin de pouvoir  simuler la parite quand on charge
+ * @brief sauvegarde à chaque tour le lancement des dès pour simuler la partie quand on la charge
  * 
- * @param f 
+ * @param fptr
  */
-void sauvegarder(FILE* f);
+void sauvegarder(FILE* fptr, int des[2]);
 
 #endif

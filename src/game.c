@@ -232,7 +232,7 @@ void conversion(int pos, int* x, int* y){
 }
 
 // plateau[100] = {0, ... ,99}, positions[n] = {pos_joueur1, ... , pos_joueur_n}
-// où n = nb_joueurs
+// où n = nbJoueur
 void affiche(int taille, int tab[][taille]){  // On suppose que taille = 10 par défault
     for (int i = 0; i < taille; ++i){
         for (int j = 0; j < taille; ++j){ printf("%d ", tab[i][j]); }
@@ -241,7 +241,7 @@ void affiche(int taille, int tab[][taille]){  // On suppose que taille = 10 par 
 }
     
 
-void afficherPlateau(int plateau[], int positions[], int nb_joueurs){
+void afficherPlateau(int plateau[], int positions[], int nbJoueur){
     int tab[10][10] = {0};
     int x = 0, y = 0;
 
@@ -254,7 +254,7 @@ void afficherPlateau(int plateau[], int positions[], int nb_joueurs){
     // le joueur courant est affiché en priorité.
     // c’est le joueur qui minimise (joueur − joueur_courant) % nb joueurs
     // qui est est affiché sur le plateau.
-    for (int i = 0; i < nb_joueurs; ++i){ // de 2 à 4 joueurs
+    for (int i = 0; i < nbJoueur; ++i){ // de 2 à 4 joueurs
         printf("Joueur %d : case %d \n", i, positions[i]);
     }
 }
