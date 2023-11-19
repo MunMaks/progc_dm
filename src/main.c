@@ -9,15 +9,16 @@ int main(int argc, char* argv[]){
     initOption(&option);
 
     choixOption(argc, argv, &option, f);
-
-    initTab(plateau, position, attente, option.nbJoueur);
-
+    
     if(option.fichier)
         f = ouvreFichier(argv[1], &option.nbJoueur);
 
+    initTab(plateau, position, attente, option.nbJoueur);
+
     lanceAlgo(option, plateau, position, attente, f);
 
-    fclose(f);
+    if(f)
+        fclose(f);
 
     return 0;
 }

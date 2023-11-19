@@ -13,7 +13,7 @@ void partieNormal(int nbJoueur, char* plateau, int* position, int* attente, FILE
     else{
         joueurCourant = charger(f, plateau, position, attente, nbJoueur, &premier);
     }
-
+    
     do{
         if(joueurCourant == nbJoueur){
             joueurCourant = 0;
@@ -133,4 +133,5 @@ void partieSimuler(int nbJoueur, char* plateau, int* position, int* attente, int
     printf("nombre de tour minimum : %d\n", min);
     printf("nombre de tour maximum : %d\n", max);
     printf("nombre de fois ou le jeu a bloqué : %d\n", planter);
+
 }
