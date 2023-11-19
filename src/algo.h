@@ -3,6 +3,8 @@
 
 #include "game.h"
 #include "fichier.h"
+#include <time.h>
+#include <string.h>
 
 /**
  * @brief lance l'algorithme pour une partie normale entre 2 et 4 joueur
@@ -11,8 +13,9 @@
  * @param plateau 
  * @param position 
  * @param attente 
+ * @param f 
  */
-void partieNormal(int nbJoueur, char* plateau, int* position, int* attente);
+void partieNormal(int nbJoueur, char* plateau, int* position, int* attente, FILE* f);
 
 /**
  * @brief lance l'algorithme pour une partie simuler entre 2 et 4 joueur 

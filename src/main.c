@@ -1,36 +1,23 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <MLV/MLV_all.h>
-//#include <option.h>
-//#include <algo.h>
-//#include <fichier.h>
-//#include <game.h>
+#include "option.h"
 
 int main(int argc, char* argv[]){
-    int nb_joueurs;
-    int des[2] = {0};
-    printf("Nombre de joueurs entre 2 et 4: ");
-    scanf(" %d", &nb_joueurs);
-    if (nb_joueurs <= 1 || nb_joueurs > 4) { perror("Nb jouers impossible\n"); return 1; }
+    Option option;
+    char plateau[100];
+    int position[4], attente[4];
+    FILE* f = NULL;
 
-    while (1) {
-        // MLV_Keyboard_button touche;
-        // ajouter des dés alétoires à l'avenir
+    initOption(&option);
 
-        printf("Deux valeurs de deux dés: ");
-        scanf(" %d %d", des, (des + 1));
+    choixOption(argc, argv, &option, f);
 
-        /*
-        MLV_wait_keyboard( &touche, NULL, NULL );
-        if (touche == MLV_KEYBOARD_q){  // q - quit, sortir
-            printf("Arrêt\n");
-            MLV_free_window(); // la férmeture
-        }
+    initTab(plateau, position, attente, option.nbJoueur);
 
-        MLV_actualise_window();
-        */
-    }
+    if(option.fichier)
+        f = ouvreFichier(argv[1], &option.nbJoueur);
 
+    lanceAlgo(option, plateau, position, attente, f);
+
+    fclose(f);
 
     return 0;
 }

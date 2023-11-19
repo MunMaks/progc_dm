@@ -3,8 +3,24 @@
 void initTab(char* plateau, int* position, int* attente, int nbJoueur){
     for(int i = 0; i < 100; i++){
         switch (i){  
-            // pour la lisibilité
-            case (10) | (19) | (30) | (70) | (79) | (80):
+            case 10 :
+                plateau[i] = 'O';
+                break;
+            
+            case 20 :
+                plateau[i] = 'O';
+                break;
+            
+            case 77 :
+                plateau[i] = 'O';
+                break;
+            
+
+            case 79 :
+                plateau[i] = 'O';
+                break;
+            
+            case 80 :
                 plateau[i] = 'O';
                 break;
             
@@ -57,38 +73,42 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
     int newPos = 0;
 
     if(premierTour){
-        if((des[1] == 3 && des[2] == 6) || (des[1] == 6 && des[2] == 3)) { position[joueurCourant] = 40; }
-
-        if((des[1] == 4 && des[2] == 5) || (des[1] == 5 && des[2] == 4)) { position[joueurCourant] = 89; }
-    }
-
-    else{
-        if(attente[joueurCourant] > 0){
-            attente[joueurCourant]--;
+        if((des[0] == 3 && des[1] == 6) || (des[0] == 6 && des[1] == 3)){ 
+            newPos = 40;
+            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
             return -1;
         }
-        
-        if(attente[joueurCourant] == -1)
-            return -1;
-    
-        somme = des[0] + des[1];
 
-        if(position[joueurCourant] + somme == 99) { return joueurCourant; }  // gagné par joueurCourant, YOUPI
-        
-        if(position[joueurCourant] + somme > 99)  { newPos = 99 - (somme - (99 - position[joueurCourant])); }
-        
-        else { newPos = position[joueurCourant] + somme; }
+
+        if((des[0] == 4 && des[1] == 5) || (des[0] == 5 && des[1] == 4)) { 
+            newPos = 89;
+            collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
+            return -1;
+        }
     }
+
+    if(attente[joueurCourant] > 0){
+        attente[joueurCourant]--;
+        return -1;
+    }
+    
+    if(attente[joueurCourant] == -1)
+        return -1;
+
+    somme = des[0] + des[1];
+    if(position[joueurCourant] + somme == 99){ 
+        position[joueurCourant] = 99;
+        return joueurCourant; // gagné par joueurCourant, YOUPI
+    }  
+    
+    if(position[joueurCourant] + somme > 99)  { newPos = 99 - (somme - (99 - position[joueurCourant])); }
+    
+    else { newPos = position[joueurCourant] + somme; }
 
     switch (plateau[newPos]){
     
-        case 'O':
-            // pas de break pour vérifier sur quel case je tombe
-            do {
-                newPos += somme;
-            } while(plateau[newPos] != 'O'); 
-
         case 'T':
+            position[joueurCourant] = newPos;
             for(int i = 0; i < nbJoueur; i++){
                 // si joueur_i qui est dans la case "T", lui, il peut jouer pourtant joueur courant ne peut plus jouer
                 if(i != joueurCourant && plateau[position[i]] == 'T' && attente[i] == -1) { attente[i] = 0; }
@@ -103,6 +123,7 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
     
         case 'P':
             // prison_fonction(int *attente...)
+            position[joueurCourant] = newPos;
             attente[joueurCourant] = -1;
             for(int i = 0; i < nbJoueur; i++){
                 // si joueur_i qui est dans la case "P", alors jouer courant et jouer_i peuvent jouer
@@ -127,6 +148,13 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
             newPos = 0;
             collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
             break;
+        
+        case 'O':
+            // pas de break pour vérifier sur quel case je tombe
+            do {
+                newPos += somme;
+            } while(plateau[newPos] == 'O');
+
     
         default:  // si case normal
             collision(plateau, position, attente, nbJoueur, joueurCourant, newPos);
@@ -139,9 +167,10 @@ int avancerJoueur(char* plateau, int* position, int* attente, int joueurCourant,
 
 
 void collision(char* plateau, int* position, int* attente, int nbJoueur, int joueurCourant, int nouvellePosition){
+    int cmpt = 0;
+
     for(int i = 0; i < nbJoueur; ++i){
-        if(i != joueurCourant && position[i] == position[joueurCourant] &&
-            plateau[position[i]] != 'P' && plateau[position[i]] != 'T'){
+        if(i != joueurCourant && position[i] == nouvellePosition && plateau[position[i]] != 'P' && plateau[position[i]] != 'T'){
             if(plateau[position[i]] == 'H')
                 attente[i] = 0;
             
@@ -160,9 +189,9 @@ void collision(char* plateau, int* position, int* attente, int nbJoueur, int jou
                     break;
         
                 case 'P':
-                    attente[joueurCourant] = -1;
-                    for(int i = 0; i < nbJoueur; i++){
-                        if(i != joueurCourant && plateau[position[i]] == 'P' && attente[i] == -1){
+                    attente[i] = -1;
+                    for(int j = 0; i < nbJoueur; i++){
+                        if(j != i && plateau[position[j]] == 'P' && attente[j] == -1){
                             attente[i] = 0;
                             attente[joueurCourant] = 0;
                         }
@@ -177,94 +206,96 @@ void collision(char* plateau, int* position, int* attente, int nbJoueur, int jou
                     break;
             }
         }
+        cmpt++;
     }
+
+    if(cmpt == nbJoueur)
+        position[joueurCourant] = nouvellePosition;
 
 }
 
-/* Dans cette fonction on modifie x et y du tableau avec coordonnées en spirale */
-void conversion(int pos, int* x, int* y){
+void conversion(int pos, int* x, int* y) {
+    // Si la position demandée est invalide, on sort directement.
+    if (pos < 0 || pos > 99) return;
 
-    if (pos <= 50){  // La moitié pour ne pas chercher longtemps
-        if (pos < 28){
-            if (0 <= pos && pos <= 9) { *x = 0; *y = pos; }
-            else if (10 <= pos && pos <= 18) { *x = pos - 9;  *y = 9;}
-            else { *x = 9; *y = 27 - pos; }  // (19 <= pos && pos <= 27)
+    int xPos = 0; 
+    int yPos = 0;
+    int direction = 0;
+
+    int lastCorner = 0;
+    int sideLength = 9;
+    int cornerCount = 0;
+
+    for (int i = 0; i < pos; i += 1) {
+        // Si on a atteint un coin, on augmente le compteur de coins, on marque notre position comme le dernier coin et on change de direction
+        if (i == lastCorner + sideLength) {
+            cornerCount += 1;
+            lastCorner = i;
+
+            direction += 1;
+            if (direction == 4) direction = 0;
         }
-        else {
-            if (28 <= pos && pos <= 35) { *x = 36 - pos; *y = 0; }
-            else if (36 <= pos && pos <= 43) { *x = 1;        *y = pos - 35; }
-            else { *x = pos - 42; *y = 8; }  // (44 <= pos && pos <= 50)
+
+        // Si on a atteint 3 coins sur l'anneau extérieur ou 2 coins autrement, on réduit la taille du côté.
+        if ((sideLength == 9 && cornerCount == 3) || (sideLength < 9 && cornerCount == 2)) {
+            sideLength -= 1;
+            cornerCount = 0;
         }
-    }
-    else if (pos <= 83){
-        if (pos <= 63){
-            if (51 <= pos && pos <= 57) { *x = 8; *y = 58 - pos; }
-            else { *x = 65 - pos; *y = 1; }  // (58 <= pos && pos <= 63)
-        }
-        
-        else if (pos <= 74){
-            if (64 <= pos && pos <= 69) { *x = 2; *y = pos - 62; }
-            else { *x = pos - 67; *y = 7; }  // (70 <= pos && pos <= 74)
-        }
-        
-        else {
-            if (75 <= pos && pos <= 79) { *x = 7; *y = 81 - pos; }
-            else { *x = 86 - pos; *y = 2; }  // (80 <= pos && pos <= 83)
-        }
+
+        // On se déplace dans la direction actuelle
+        if (direction == 0) xPos += 1;
+        else if (direction == 1) yPos += 1;
+        else if (direction == 2) xPos -= 1;
+        else yPos -= 1;
     }
 
-    else if (pos <= 98){
-        if (pos <= 90)
-            if (84 <= pos && pos <= 87) { *x = 3; *y = pos - 81; }
-            else { *x = pos - 84; *y = 6; }  // (88 <= pos && pos <= 90)
-        
-        else if (pos <= 95) {
-            if (91 <= pos && pos <= 93) { *x = 6; *y = 96 - pos; }
-            else { *x = 99 - pos; *y = 3; }  // (94 <= pos && pos <= 95)
-        }
-        
-        else {
-            if (96 <= pos && pos <= 97) { *x = 4; *y = pos - 92; }
-            else {*x = 5; *y = 5; }
-        }
-    }
-    else { *x = 5; *y = 4; }
+    // On attribue le résultat aux 2 pointeurs.
+    *x = xPos;
+    *y = yPos;
 }
 
 // plateau[100] = {0, ... ,99}, positions[n] = {pos_joueur1, ... , pos_joueur_n}
-// où n = nbJoueur
-void affiche(int taille, int tab[][taille]){  // On suppose que taille = 10 par défault
+// où n = nb_joueurs
+void affiche(int taille, char tab[][taille]){  // On suppose que taille = 10 par défault
     for (int i = 0; i < taille; ++i){
-        for (int j = 0; j < taille; ++j){ printf("%d ", tab[i][j]); }
-        printf("\n");
+        for (int j = 0; j < taille; ++j){ printf("|%c", tab[j][i]); }
+        printf("|\n");
     }
 }
     
 
-void afficherPlateau(int plateau[], int positions[], int nbJoueur){
-    int tab[10][10] = {0};
-    int x = 0, y = 0;
+void afficherTableau(char plateau[], int positions[], int nb_joueurs, int joueurCourant){
+    char tab[10][10];
+    int x, y;
 
     for (int i = 0; i < 100; ++i){
         conversion(i, &x,  &y);
-        tab[x][y] = i;
+        tab[x][y] = plateau[i];
     }
+
+    for(int i = 0; i < nb_joueurs; i++){
+        for(int j = i+1; j < nb_joueurs; j++){
+            // verifie si j est sur j
+            if(positions[i] == positions[j]){
+                conversion(positions[i], &x, &y);
+                tab[x][y] = (i - joueurCourant) % nb_joueurs + '0'; // onaffiche celui qui minimise
+            }
+
+        }
+
+        // si i est sur personne on l'affiche
+        conversion(positions[i], &x, &y);
+        tab[x][y] = i + '0';
+    }
+
+    conversion(positions[joueurCourant], &x, &y);
+    tab[x][y] = joueurCourant + '0';
+
+
     affiche(10, tab);
-    // Important faire:
-    // le joueur courant est affiché en priorité.
-    // c’est le joueur qui minimise (joueur − joueur_courant) % nb joueurs
-    // qui est est affiché sur le plateau.
-    for (int i = 0; i < nbJoueur; ++i){ // de 2 à 4 joueurs
+    
+    for (int i = 0; i < nb_joueurs; ++i){ // de 2 à 4 joueurs
         printf("Joueur %d : case %d \n", i, positions[i]);
     }
-}
-    
 
-// pour vérifier, après in peut supprimer
-int main() {
-    int lst[100];
-    for (int i = 0; i < 100; ++i){ lst[i] = i; }
-    int position[4] = {0, 15, 17, 80};  // 4 parce que 4 joueurs, exemple
-    afficherPlateau(lst, position, 4);
-    return 0;
 }

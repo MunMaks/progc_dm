@@ -1,6 +1,8 @@
 #ifndef __GAME__
 #define __GAME__
 
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * @brief initialise les differrent plateau necessaire au bon fonctionnement du jeux
@@ -57,6 +59,6 @@ void conversion(int pos, int* x, int* y); // to do
  * @param position 
  * @param nbJoueur 
  */
-void afficherTableau(int* plateau, int* position, int nbJoueur); // to do
+void afficherTableau(char* plateau, int* position, int nbJoueur, int joueurCourant); // to do
 
 #endif

@@ -1,29 +1,36 @@
 #ifndef __FICHIER__
 #define __FICHIER__
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "game.h"
+#include <string.h>
+#define LIGNE_LONGUEUR 32
 
 /**
  * @brief ouvre le fichier
  * 
- * @param nom 
- * @return FILE* 
+ * @param nomFichier 
+ * @param nbJoueur 
  */
-FILE* ouvreFichier(const char* nomFichier, int nbJoeur);
+FILE* ouvreFichier(const char* nomFichier, int* nbJoueur);
 
 /**
- * @brief simule la partie sauvegardée dans le fichier
+ * @brief simule la partie sauvegarder dans le fichier
  * 
- * @param fptr
+ * @param f 
+ * @param plateau 
+ * @param position 
+ * @param attente 
+ * @param nbJoueur 
+ * @param premier 
+ * @return int 
  */
-void charger(FILE* fptr);
+int charger(FILE* f, char* plateau, int* position, int* attente, int nbJoueur, int* premier);
 
 /**
- * @brief sauvegarde à chaque tour le lancement des dès pour simuler la partie quand on la charge
+ * @brief sauvegarde a chaque tour le lancer de de afin de pouvoir  simuler la parite quand on charge
  * 
- * @param fptr
+ * @param f 
  */
-void sauvegarder(FILE* fptr, int des[2]);
+void sauvegarder(FILE* f, int des[2]);
 
 #endif

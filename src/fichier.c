@@ -1,82 +1,87 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-// #include <sys/stat.h>
 #include "fichier.h"
-#include "option.h"
-#include "algo.h"
-#include "fichier.h"
-#include "game.h"
-#define LIGNE_LONGUEUR 32
 
-FILE* ouvreFichier(const char* nomFichier, int nbJoeur){
-    if (2 > nbJoeur || 4 < nbJoeur){ return NULL; }  // nbJoueur entre 2 et 4
-    
-    FILE * fptr;
-    fptr = fopen(nomFichier, "r+");
+
+FILE* ouvreFichier(const char* nomFichier, int* nbJoueur){
+    FILE * f;
+
+    f = fopen(nomFichier, "r+");
     char ligne[LIGNE_LONGUEUR];
-    if (!fptr) {   // Le fichier n'existe pas, on va le créer
+    if (!f) {   // Le fichier n'existe pas, on va le créer
 
-        fptr = fopen(nomFichier, "w");  // "w" mode peut être utiliser pour créer un fichier
+        f = fopen(nomFichier, "w");  // "w" mode peut être utiliser pour créer un fichier
 
-        fprintf(fptr, "JO\n");  // Insérer le bon format
-        fprintf(fptr, "%d\n", nbJoeur);  // Cette construction ajoute le nbJoueur dans le fichier
+        fprintf(f, "JO\n");  // Insérer le bon format
+
+        printf("entrez le nombre de joueur : ");
+
+        scanf("%d", nbJoueur);
+
+        fprintf(f, "%d\n", *nbJoueur);
         
-        fclose(fptr);
-        fptr = fopen(nomFichier, "r+");  // La lécture et l'écriture 
+        fclose(f);
+
+        f = fopen(nomFichier, "r+"); // La lécture et l'écriture
+
+        fseek(f, 5, SEEK_SET);
     }
+
     else {  // Le fichier existe, on vérifie le format
-        if (fgets(ligne, LIGNE_LONGUEUR, fptr) && (strcmp(ligne, "JO\n"))) {
+        if (fgets(ligne, LIGNE_LONGUEUR, f) && (strcmp(ligne, "JO\n"))) {
             printf("Le fichier, %s ne respecte pas de format ERREUR\n", nomFichier);
             return NULL;
-            }
-        
-        // Si on a un bon format, on vérifie le bon nombre de joueurs
-        fgets(ligne, LIGNE_LONGUEUR, fptr);  // deuxième ligne du fichier
-        // on compare le code ASCII
-        if ((ligne[0] < '2' || ligne[0] > '4') && (ligne[1] == '\n')){ return NULL; } 
-    }
-    
-    // On ne fermer pas de fichier en plus on a vu la première ligne.
-    return fptr;
-}
-
-void charger(FILE* fptr);  // pour l'instant rien
-
-
-void sauvegarder(FILE* fptr, int des[2]){
-    //  ouverture en mode "r+" pour pouvoir lire et écrire sans  la perte du contenue précédente
-    if (fptr == NULL) { perror("Échoé d'ouvrir le fichier\n"); return; }
-    
-    char ligne[256];  // pow(2, 10);
-
-    // Si fichier.jo n'existe pas...
-    if (fgets(ligne, 256, fptr)){
-        if (strcmp(ligne, "JO\n")){  // si "JO\n" == "JO\n" alors strcmp() renvoye 0
-            fprintf(fptr, "JO\n");  // ou on peut utliser fputc()
         }
+        
+        
+        fgets(ligne, LIGNE_LONGUEUR, f);  // deuxième ligne du fichier
+
+        *nbJoueur = atoi(ligne);
+    }
+    
+    // On ne fermer pas de fichier en plus on a vu les 2 premières ligne.
+    return f;
+}
+
+int charger(FILE* f, char* plateau, int* position, int* attente, int nbJoueur, int* premier){
+    int des[2], joueurCourant = 0;
+    char ligne[10], c;
+
+    if((c = fgetc(f)) == -1)
+        return joueurCourant;
+    
+    else
+        fseek(f, -1, SEEK_CUR);    
+
+    fgets(ligne, 10, f);
+
+    while(feof(f) == 0){
+
+        if(joueurCourant == nbJoueur){
+            joueurCourant = 0;
+            if(*premier)
+                *premier = 0;
+        }
+
+        
+        
+        des[0] = ligne[0] - '0';
+
+        des[1] = ligne[2] - '0';
+
+        avancerJoueur(plateau, position, attente, joueurCourant, nbJoueur, des, *premier);
+
+        joueurCourant++;
+
+        fgets(ligne, 10, f);
+
     }
 
-    // le nombre de joueurs
-    // if (fgetc(fptr) != nbJoueur){
-    //    fputc(nbJoueur, fptr);
-    // }
-    // fputc("\n", fptr); 
+    return joueurCourant;
     
 }
 
-int main(int argc, char* argv[]){
-    // char nom[9] = "test.txt"; nom[8] = '\0';
-    char name[9] = "text.txt"; name[8] = '\0';
+
+void sauvegarder(FILE* f, int des[2]){
+
+    fprintf(f, "%d %d\n", des[0], des[1]);
     
-    int des[2] = {4, 5};
-    int nbJoueur = 4;
-
-    FILE * fptr = ouvreFichier(name, nbJoueur);
-    sauvegarder(fptr, des);
-
-    printf("\n");
-
-    fclose(fptr);
-    return 0;
 }
