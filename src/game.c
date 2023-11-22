@@ -171,8 +171,6 @@ void collision(char* plateau, int* position, int* attente, int nbJoueur, int jou
 
     for(int i = 0; i < nbJoueur; ++i){
         if(i != joueurCourant && position[i] == nouvellePosition && plateau[position[i]] != 'P' && plateau[position[i]] != 'T'){
-            if(plateau[position[i]] == 'H')
-                attente[i] = 0;
             
             position[i] = position[joueurCourant];
             position[joueurCourant] = nouvellePosition;
